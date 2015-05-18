@@ -1,0 +1,20 @@
+{
+  "name": "emoji",
+  "version": "0.0.0",
+  "homepage": "https://github.com/kambayashia/kambayashia.github.io",
+  "authors": [
+    "kambayashia@gmail.com"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "emojify": "~1.0.1",
+    "jquery-textcomplete": "~0.3.9"
+  }
+}
