@@ -11,10 +11,33 @@
         <script src="js/emojify/emojify.js"></script>
         <link rel="stylesheet" href="css/emojify/basic/emojify.css" />
         <link rel="stylesheet" href="css/emojify/data-uri/emojify.css" />
+
+        <script>
+            $(function() {
+                // emojify
+                emojify.setConfig({
+                    mode: 'data-uri'
+                });
+
+                var updateText = function() {
+                    var text = $("#input").val();
+                    text = emojify.replace(text);
+                    $("#message").html(text);
+                };
+                
+                $("#input").keypress(function(e) {
+                    if (e.which == 13) {
+                        updateText();
+                        e.preventDefault();
+                    }
+                });
+                $("button").click(updateText);
+            });
+        </script>
     </head>
     <body>
-        <textarea id="input">
-        </textarea>
-        <div id="messsage"></div>
+        <textarea id="input"></textarea>
+        <button type="button">表示</button>
+        <div id="message"></div>
     </body>
 </html>
