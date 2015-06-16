@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>GAE Channel API</title>
+        <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script>
+         var strew_domain = "http://strew-stg.appspot.com";
+         //var strew_domain = "http://localhost:8080";
+         var app_token = "hogehoge";
+         var app_token_secret = "fugafuga";
+         var channel = "koko";
+         var send_url = strew_domain + "/send/" + app_token + "/" + channel + "/" + app_token_secret;
+         
+         function receiveMessage(event) {
+             console.log(event);
+             var li = document.createElement("li");
+             li.innerHTML = event.data;
+             document.getElementById("messageList").appendChild(li);
+         }
+
+         function sendMessage() {
+             var dom = document.getElementById("message");
+             var message = dom.value;
+             if (message == "") {
+                 return;
+             }
+
+             $.ajax({
+                 contentType: 'application/json',
+                 data: JSON.stringify({
+                     "message": message
+                 }),
+                 dataType: 'json',
+                 success: function(data){
+                 },
+                 error: function(){
+                 },
+                 processData: false,
+                 type: 'POST',
+                 url: send_url
+             });
+         }
+         
+         function start() {
+             var iframe = document.createElement("iframe");
+             iframe.id = "strew";
+             iframe.src = strew_domain + "/channel/" + app_token + "/" + channel;
+             iframe.style.display = "none";
+             document.body.appendChild(iframe);
+
+             document.getElementById("command").innerHTML = 'curl -v -H \"Content-type: application/json charset=utf-8\" -d \'{\"array\": [1,2,3], \"kaisou\": {\"kodomo1\": [4,5,6,0]}}\' ' + send_url;
+             window.addEventListener("message", receiveMessage, false);
+         }
+         
+        </script>
+    </head>
+    <body onload="start()">
+        <h1>下記コマンドを実行すると、メッセージリストに表示されるよ(もしかしたら誰かが同タイミングで実行してるかも)。</h1>
+        <div id="command" style="background-color:#E3F2FD">
+        </div>
+        <!--
+        <h1>テキストを入れてボタンを押すと、通知が飛ぶよ</h1>
+        <div>
+            <input type="text" id="message"/>
+            <button type="button" name="送信" onclick="sendMessage()">送信</button>
+        </div>
+        -->
+        <div>
+            <h2>メッセージリスト</h2>
+            <ul id="messageList">
+            </ul>
+        </div>
+    </body>
+</html>
