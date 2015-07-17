@@ -6,10 +6,10 @@
         <script>
          var strew_domain = "http://strew-stg.appspot.com";
          //var strew_domain = "http://localhost:8080";
-         var app_token = "5990337d57d71148d61128010fb0e32e76cab4a450cc1fbd893d0d99e53e10d8";
-         var app_token_secret = "fc6d53c7eec86eeb6872411537565219a97c14cabf78d8e16c8f98995ca42c53";
-         var channel = "koko";
-         var send_url = strew_domain + "/send/" + app_token + "/" + channel + "/" + app_token_secret;
+         var app_token;
+         var app_token_secret;
+         var channel;
+         var send_url;
          
          function receiveMessage(event) {
              console.log(event);
@@ -40,21 +40,46 @@
                  url: send_url
              });
          }
-         
-         function start() {
+
+         function startChannel() {
+             app_token = $('#app_token').val();
+             app_token_secret = $('#app_token_secret').val();
+             channel = $('#channel_name').val();
+             send_url = strew_domain + "/send/" + app_token + "/" + channel + "/" + app_token_secret;
+
              var iframe = document.createElement("iframe");
              iframe.id = "strew";
-             iframe.src = strew_domain + "/channel/" + app_token + "/" + channel;
+             iframe.src = strew_domain + "/channel/start/" + app_token + "/" + channel;
              iframe.style.display = "none";
              document.body.appendChild(iframe);
 
              document.getElementById("command").innerHTML = 'curl -v -H \"Content-type: application/json charset=utf-8\" -d \'{\"array\": [1,2,3], \"kaisou\": {\"kodomo1\": [4,5,6,0]}}\' ' + send_url;
+         }
+         
+         function start() {
              window.addEventListener("message", receiveMessage, false);
          }
          
         </script>
     </head>
     <body onload="start()">
+        <div>
+            <h2>チャンネル情報</h2>
+            <p>
+                <label for="app_token">app token</label>
+                <input type="text" id="app_token" value="">
+            </p>
+            <p>
+                <label for="app_token_secret">app token secret</label>
+                <input type="text" id="app_token_secret" value="">
+            </p>
+            <p>
+                <label for="channel_name">channel name</label>
+                <input type="text" id="channel_name" value="main">
+            </p>
+            <button type="button" onclick="startChannel();">開始</button>
+        </div>
+            
         <h1>下記コマンドを実行すると、メッセージリストに表示されるよ(もしかしたら誰かが同タイミングで実行してるかも)。</h1>
         <div id="command" style="background-color:#E3F2FD">
         </div>
